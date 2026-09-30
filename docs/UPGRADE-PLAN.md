@@ -25,6 +25,7 @@ Score: 7.5/10 — developer text tools with lossless JSON formatting, unicode-aw
 - Bug fix: case conversion split on `[^A-Za-z0-9]`, so `café au lait` became `caf_au_lait` and Thai words vanished entirely. Words are now split on Unicode letters/marks/digits.
 - Edge-case unit tests: number/escape preservation, structural characters inside strings, empty containers, scalars, trailing garbage, format-then-decode equality, accented/Thai/emoji case conversion, Base64 (empty, newlines, non-UTF-8 bytes), URL decode (`%`, `+`, unicode round trip).
 - Accessibility: output is a labelled live region ("Output"/"Error"). Widget tests: invalid input disables copy, a11y guidelines (tap target, labels, contrast), 200% text scale.
+- The 200% text-scale widget test now runs at a 360 px phone width (it previously used the 800 px default test surface); no overflow found.
 
 ## Done in pass 2
 
