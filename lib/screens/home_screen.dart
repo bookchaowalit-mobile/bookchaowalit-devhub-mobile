@@ -78,12 +78,16 @@ class _HomeScreenState extends State<HomeScreen> {
               color: colors.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: SelectableText(
-              result.isOk ? result.output : result.error!,
-              key: const Key('tool-output'),
-              style: TextStyle(
-                fontFamily: 'monospace',
-                color: result.isOk ? null : colors.error,
+            child: Semantics(
+              liveRegion: true,
+              label: result.isOk ? 'Output' : 'Error',
+              child: SelectableText(
+                result.isOk ? result.output : result.error!,
+                key: const Key('tool-output'),
+                style: TextStyle(
+                  fontFamily: 'monospace',
+                  color: result.isOk ? null : colors.error,
+                ),
               ),
             ),
           ),

@@ -28,4 +28,44 @@ void main() {
     await tester.pump();
     expect(out(), 'hello_world');
   });
+
+  Widget home({double textScale = 1}) => MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
+          child: const HomeScreen(),
+        ),
+      );
+
+  testWidgets('invalid input shows an error and disables copy', (
+    tester,
+  ) async {
+    await tester.pumpWidget(home());
+    await tester.enterText(find.byKey(const Key('tool-input')), '{bad');
+    await tester.pump();
+    final out = tester
+        .widget<SelectableText>(find.byKey(const Key('tool-output')))
+        .data!;
+    expect(out, startsWith('Invalid JSON'));
+    final copy = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.copy),
+    );
+    expect(copy.onPressed, isNull);
+  });
+
+  testWidgets('meets tap-target, label and contrast guidelines', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(home());
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    handle.dispose();
+  });
+
+  testWidgets('lays out at 200% text scale without overflow', (tester) async {
+    await tester.pumpWidget(home(textScale: 2));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }
